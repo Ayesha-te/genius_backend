@@ -6,3 +6,4 @@ requests==2.32.3
 dj-database-url>=1.0.0
 gunicorn
 python-decouple
+psycopg2-binary
