@@ -26,6 +26,7 @@ DVLA_API_KEY = config('DVLA_API_KEY', default='')
 # Installed Apps
 # --------------------
 INSTALLED_APPS = [
+    # Core Django
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -36,6 +37,7 @@ INSTALLED_APPS = [
     # 3rd-party
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',  # For CORS
 
     # Your apps
     'booking',
@@ -49,6 +51,7 @@ INSTALLED_APPS = [
 # Middleware
 # --------------------
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # Must be high up
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -56,7 +59,13 @@ MIDDLEWARE = [
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# --------------------
+# CORS Configuration
+# --------------------
+CORS_ALLOW_ALL_ORIGINS = True  # ⚠️ Only use in development. For production, use CORS_ALLOWED_ORIGINS
 
 # --------------------
 # Root Config
@@ -88,7 +97,7 @@ TEMPLATES = [
 # --------------------
 DATABASES = {
     'default': dj_database_url.parse(
-        config('DATABASE_URL'),
+        config('DATABASE_URL', default='sqlite:///db.sqlite3'),
         conn_max_age=600,
         ssl_require=True
     )
@@ -116,13 +125,17 @@ USE_I18N = True
 USE_TZ = True
 
 # --------------------
-# Static Files
+# Static & Media Files
 # --------------------
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # --------------------
 # Default Primary Key Field
 # --------------------
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 
